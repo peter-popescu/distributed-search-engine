@@ -88,7 +88,11 @@ test('(25 pts) rpc w/ arguments', (done) => {
 */
 
 beforeAll((done) => {
-  distribution.node.start(() => {
+  distribution.node.start((e) => {
+    if (e) {
+      done(e);
+      return;
+    }
     done();
   });
 });

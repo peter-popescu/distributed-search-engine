@@ -166,10 +166,30 @@ test('(10 pts) all.mem.reconf', (done) => {
   // Now we actually put items in the group,
   // remove n5, and check if the items are placed correctly
   distribution.mygroup.mem.put(users[0], keys[0], (e, v) => {
+    if (e) {
+      done(e);
+      return;
+    }
     distribution.mygroup.mem.put(users[1], keys[1], (e, v) => {
+      if (e) {
+        done(e);
+        return;
+      }
       distribution.mygroup.mem.put(users[2], keys[2], (e, v) => {
+        if (e) {
+          done(e);
+          return;
+        }
         distribution.mygroup.mem.put(users[3], keys[3], (e, v) => {
+          if (e) {
+            done(e);
+            return;
+          }
           distribution.mygroup.mem.put(users[4], keys[4], (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             // We need to pass a copy of the group's
             // nodes before we call reconf()
             const groupCopy = {...mygroupGroup};
@@ -178,11 +198,23 @@ test('(10 pts) all.mem.reconf', (done) => {
             // and run reconf() with the new list of nodes
             // Note: In this scenario, we are removing a node that has no items in it.
             distribution.local.groups.rem('mygroup', id.getSID(n3), (e, v) => {
+              if (e && Object.keys(e).length > 0) {
+                done(e);
+                return;
+              }
               distribution.mygroup.groups.rem(
                   'mygroup',
                   id.getSID(n3),
                   (e, v) => {
+                    if (e && Object.keys(e).length > 0) {
+                      done(e);
+                      return;
+                    }
                     distribution.mygroup.mem.reconf(groupCopy, (e, v) => {
+                      if (e) {
+                        done(e);
+                        return;
+                      }
                       checkPlacement();
                     });
                   });
@@ -253,14 +285,26 @@ beforeAll((done) => {
     mygroupGroup[id.getSID(n5)] = n5;
 
     // Now, start the nodes listening node
-    distribution.node.start(() => {
+    distribution.node.start((e) => {
+      if (e) {
+        done(e);
+        return;
+      }
       const groupInstantiation = () => {
         const mygroupConfig = {gid: 'mygroup'};
 
         // Create the groups
         distribution.local.groups.put(mygroupConfig, mygroupGroup, (e, v) => {
+          if (e && Object.keys(e).length > 0) {
+            done(e);
+            return;
+          }
           distribution.mygroup.groups
               .put(mygroupConfig, mygroupGroup, (e, v) => {
+                if (e && Object.keys(e).length > 0) {
+                  done(e);
+                  return;
+                }
                 done();
               });
         });
@@ -268,11 +312,35 @@ beforeAll((done) => {
 
       // Start the nodes
       distribution.local.status.spawn(n1, (e, v) => {
+        if (e) {
+          done(e);
+          return;
+        }
         distribution.local.status.spawn(n2, (e, v) => {
+          if (e) {
+            done(e);
+            return;
+          }
           distribution.local.status.spawn(n3, (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             distribution.local.status.spawn(n4, (e, v) => {
+              if (e) {
+                done(e);
+                return;
+              }
               distribution.local.status.spawn(n5, (e, v) => {
+                if (e) {
+                  done(e);
+                  return;
+                }
                 distribution.local.status.spawn(n6, (e, v) => {
+                  if (e) {
+                    done(e);
+                    return;
+                  }
                   groupInstantiation();
                 });
               });

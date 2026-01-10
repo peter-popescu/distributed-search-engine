@@ -121,7 +121,11 @@ test('(3 pts) comm: routes.get()', (done) => {
   const message = [
     'status',
   ];
-  distribution.node.start(() => {
+  distribution.node.start((e) => {
+    if (e) {
+      done(e);
+      return;
+    }
     local.comm.send(message, remote, (e, v) => {
       try {
         expect(e).toBeFalsy();

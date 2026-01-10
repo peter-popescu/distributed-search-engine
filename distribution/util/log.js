@@ -3,7 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const logFile = path.join('/tmp', 'log.txt');
+const logFile = process.env.DISTRIBUTION_LOG_FILE || path.join('/tmp', 'log.txt');
 
 /**
  * @param {string} message

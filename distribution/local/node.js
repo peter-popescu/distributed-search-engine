@@ -7,18 +7,30 @@ const http = require('node:http');
 const url = require('node:url');
 const log = require('../util/log.js');
 
-const args = require('yargs').argv;
+const yargs = require('yargs/yargs');
 
 /**
  * @returns {Node}
  */
 function setNodeConfig() {
+  const args = yargs(process.argv)
+      .help(false)
+      .version(false)
+      .parse();
   let maybeIp; let maybePort; let maybeOnStart;
   if (typeof args.ip === 'string') {
     maybeIp = args.ip;
   }
-  if (typeof args.port === 'string') {
-    maybePort = parseInt(args.port);
+  if (typeof args.port === 'string' || typeof args.port === 'number') {
+    maybePort = parseInt(String(args.port), 10);
+  }
+
+  if (args.help === true || args.h === true) {
+    console.log('Node usage:');
+    console.log('  --ip <ip address>      The ip address to bind the node to');
+    console.log('  --port <port>          The port to bind the node to');
+    console.log('  --config <config>      The serialized config string');
+    process.exit(0);
   }
 
   if (typeof args.config === 'string') {
@@ -54,7 +66,7 @@ function setNodeConfig() {
 
 
 /**
- * @param {() => void} callback
+ * @param {(err?: Error | null) => void} callback
  * @returns {void}
  */
 function start(callback) {
@@ -118,15 +130,14 @@ function start(callback) {
   */
 
   const config = globalThis.distribution.node.config;
-  server.listen(config.port, config.ip, () => {
+  server.once('listening', () => {
     globalThis.distribution.node.server = server;
-    callback();
+    callback(null);
   });
-
-  server.on('error', (error) => {
-    // server.close();
-    throw error;
+  server.once('error', (error) => {
+    callback(error);
   });
+  server.listen(config.port, config.ip);
 }
 
 module.exports = {start, config: setNodeConfig()};

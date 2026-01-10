@@ -29,6 +29,19 @@ By default:
 EOF
 }
 
+top=$(git rev-parse --show-toplevel)
+# Check for leftover ports from previous test runs
+all_ports=$(grep -Rho 'port: [0-9]\+' "$top/test" | cut -d' ' -f2 | sort -n  | uniq)
+for port in $all_ports; do
+    if lsof -i tcp:"$port" &>/dev/null; then
+        echo "[test] WARNING: Port $port is currently in use. This may interfere with test execution."
+        echo "Use ./scripts/cleanup.sh to free up the port."
+        echo "If this is unexpected, please investigate which process is using the port."
+        echo "Use 'lsof -i tcp:$port' to identify the process."
+        exit 1
+    fi
+done
+
 PATTERN=""
 
 # Parse command-line arguments
@@ -97,20 +110,22 @@ if ! $RUN_EXTRA_CREDIT; then
     JEST_COMMAND_FLAGS+=" --testPathIgnorePatterns \"extra\""
 fi
 
+# Warn if reference implementation is enabled
+top_level=$(git rev-parse --show-toplevel)
+if [ "$(jq -r '.useLibrary' "$top_level/package.json")" = "true" ]; then
+    echo "[test] WARNING: You are using the reference implementation. Set useLibrary to false in package.json to run your own implementation."
+fi
+
 # Run the constructed jest command with the rest of the arguments
 # shellcheck disable=SC2294
 if [ -n "$PATTERN" ]; then
-    eval "$JEST_COMMAND --testMatch \"**/*$PATTERN*\""
+    MATCH_FLAGS=""
+    MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*test*.js\""
+    MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*.extra.test.js\""
+    MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*.scenario.js\""
+    eval "$JEST_COMMAND $MATCH_FLAGS $JEST_COMMAND_FLAGS"
     exit $?
 else
     eval "$JEST_COMMAND $JEST_COMMAND_FLAGS"
     exit $?
-fi
-
-top_level=$(git rev-parse --show-toplevel)
-
-# Check if the student is using the reference implementation (useLibrary in package.json is true)
-if [ "$(jq -r '.useLibrary' "$top_level/package.json")" = "true" ]; then
-    echo "[test] WARNING: You are using the reference implementation. Make sure to set useLibrary to false in package.json to use your own implementation."
-    exit 1
 fi

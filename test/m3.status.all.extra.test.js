@@ -16,6 +16,7 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
       expect(v.port).toEqual(nodeToSpawn.port);
     } catch (error) {
       done(error);
+      return;
     }
     let remote = {node: nodeToSpawn, service: 'status', method: 'get'};
 
@@ -26,6 +27,7 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
         expect(v).toEqual(id.getNID(nodeToSpawn));
       } catch (error) {
         done(error);
+        return;
       }
 
       distribution.local.groups.get('group4', (e, v) => {
@@ -34,6 +36,7 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
           expect(v[id.getSID(nodeToSpawn)]).toBeDefined();
         } catch (error) {
           done(error);
+          return;
         }
 
         remote = {node: nodeToSpawn, service: 'status', method: 'stop'};
@@ -46,6 +49,7 @@ test('(10 pts) all.status.spawn/stop()', (done) => {
             expect(v.port).toEqual(nodeToSpawn.port);
           } catch (error) {
             done(error);
+            return;
           }
           remote = {node: nodeToSpawn, service: 'status', method: 'get'};
 
@@ -120,7 +124,11 @@ beforeAll((done) => {
   group4Group[id.getSID(n4)] = n4;
 
   // Now, start the base listening node
-  distribution.node.start(() => {
+  distribution.node.start((e) => {
+    if (e) {
+      done(e);
+      return;
+    }
     const groupInstantiation = (e, v) => {
       const mygroupConfig = {gid: 'mygroup'};
       const group4Config = {gid: 'group4'};
@@ -128,9 +136,21 @@ beforeAll((done) => {
       // Create some groups
       distribution.local.groups
           .put(mygroupConfig, mygroupGroup, (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             distribution.local.groups
                 .put(group4Config, group4Group, (e, v) => {
+                  if (e) {
+                    done(e);
+                    return;
+                  }
                   distribution.group4.groups.put(group4Config, group4Group, (e, v) => {
+                    if (e && Object.keys(e).length > 0) {
+                      done(e);
+                      return;
+                    }
                     done();
                   });
                 });
@@ -139,11 +159,37 @@ beforeAll((done) => {
 
     // Start the nodes
     distribution.local.status.spawn(n1, (e, v) => {
+      if (e) {
+        done(e);
+        return;
+      }
       distribution.local.status.spawn(n2, (e, v) => {
+        if (e) {
+          done(e);
+          return;
+        }
         distribution.local.status.spawn(n3, (e, v) => {
+          if (e) {
+            done(e);
+            return;
+          }
           distribution.local.status.spawn(n4, (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             distribution.local.status.spawn(n5, (e, v) => {
-              distribution.local.status.spawn(n6, groupInstantiation);
+              if (e) {
+                done(e);
+                return;
+              }
+              distribution.local.status.spawn(n6, (e, v) => {
+                if (e) {
+                  done(e);
+                  return;
+                }
+                groupInstantiation();
+              });
             });
           });
         });
@@ -179,5 +225,3 @@ afterAll((done) => {
     });
   });
 });
-
-

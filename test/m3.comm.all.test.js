@@ -24,8 +24,8 @@ test('(2 pts) all.comm.send(status.get(nid))', (done) => {
   const remote = {service: 'status', method: 'get'};
 
   distribution.mygroup.comm.send(['nid'], remote, (e, v) => {
-    expect(e).toEqual({});
     try {
+      expect(e).toEqual({});
       expect(Object.values(v).length).toEqual(nids.length);
       expect(Object.values(v)).toEqual(expect.arrayContaining(nids));
       done();
@@ -41,13 +41,18 @@ test('(2 pts) local.comm.send(all.status.get(nid))', (done) => {
 
   // first register mygroup on n5
   distribution.local.comm.send([mygroupConfig, mygroupGroup], remote, (e, v) => {
+    try {
+      expect(e).toBeFalsy();
+    } catch (error) {
+      done(error);
+      return;
+    }
     const remote = {node: n5, gid: 'mygroup', service: 'status', method: 'get'};
 
     // from local node, run mygroup.status.get() on n5 via send()
     distribution.local.comm.send(['nid'], remote, (e, v) => {
-      expect(e).toEqual({});
-
       try {
+        expect(e).toEqual({});
         expect(Object.values(v).length).toEqual(nids.length);
         expect(Object.values(v)).toEqual(expect.arrayContaining(nids));
         done();
@@ -205,20 +210,52 @@ beforeAll((done) => {
       // Create the groups
       distribution.local.groups
           .put(mygroupConfig, mygroupGroup, (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             done();
           });
     };
 
 
     // Now, start the nodes listening node
-    distribution.node.start(() => {
+    distribution.node.start((e) => {
+      if (e) {
+        done(e);
+        return;
+      }
       // Start the nodes
       distribution.local.status.spawn(n1, (e, v) => {
+        if (e) {
+          done(e);
+          return;
+        }
         distribution.local.status.spawn(n2, (e, v) => {
+          if (e) {
+            done(e);
+            return;
+          }
           distribution.local.status.spawn(n3, (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             distribution.local.status.spawn(n4, (e, v) => {
+              if (e) {
+                done(e);
+                return;
+              }
               distribution.local.status.spawn(n5, (e, v) => {
+                if (e) {
+                  done(e);
+                  return;
+                }
                 distribution.local.status.spawn(n6, (e, v) => {
+                  if (e) {
+                    done(e);
+                    return;
+                  }
                   groupInstantiation();
                 });
               });

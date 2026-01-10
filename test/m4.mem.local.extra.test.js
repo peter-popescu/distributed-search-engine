@@ -59,4 +59,3 @@ test('(1 pts) local.mem.get(no key)', (done) => {
     });
   });
 });
-

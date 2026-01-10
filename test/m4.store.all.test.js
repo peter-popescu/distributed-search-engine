@@ -376,7 +376,11 @@ beforeAll((done) => {
     mygroupBGroup[id.getSID(n5)] = n5;
 
     // Now, start the nodes listening node
-    distribution.node.start(() => {
+    distribution.node.start((e) => {
+      if (e) {
+        done(e);
+        return;
+      }
       const groupInstantiation = () => {
         const mygroupConfig = {gid: 'mygroup'};
         const mygroupBConfig = {gid: 'mygroupB', hash: id.rendezvousHash};
@@ -434,5 +438,4 @@ afterAll((done) => {
     });
   });
 });
-
 

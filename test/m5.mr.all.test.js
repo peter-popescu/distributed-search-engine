@@ -219,7 +219,11 @@ beforeAll((done) => {
       });
     };
 
-    distribution.node.start(() => {
+    distribution.node.start((e) => {
+      if (e) {
+        done(e);
+        return;
+      }
       const ncdcConfig = {gid: 'ncdc'};
       startNodes(() => {
         distribution.local.groups.put(ncdcConfig, ncdcGroup, (e, v) => {

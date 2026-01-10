@@ -10,8 +10,8 @@ const log = require('./distribution/util/log.js');
  */
 function bootstrap(config) {
   if (globalThis.distribution) {
-    log('global.distribution has already been setup');
-    return;
+    log('distribution has already been setup!');
+    return globalThis.distribution;
   }
 
   // @ts-ignore This is the first time globalThis.distribution is being initialized, so the object does not have all the necessary properties.
@@ -35,12 +35,13 @@ function bootstrap(config) {
   /* Overrides when missing functionality from previous milestone or extra credit is needed */
 
   // For M3, when missing RPC, its path through routes, and status.{spawn, stop}
-  /*
+  /* __start_M3_solution__
   globalThis.distribution.util.wire.createRPC = require('@brown-ds/distribution').util.wire.createRPC;
   globalThis.distribution.local.routes.get = require('@brown-ds/distribution').local.routes.get;
   globalThis.distribution.local.status.spawn = require('@brown-ds/distribution').local.status.spawn;
   globalThis.distribution.local.status.stop = require('@brown-ds/distribution').local.status.stop;
-  */
+  __end_M3_solution__ */
+  return globalThis.distribution;
 }
 
 /*
@@ -58,8 +59,7 @@ const distribution = useLibrary ? require('@brown-ds/distribution') : bootstrap;
 
 /* The following code is run when distribution.js is run directly */
 if (require.main === module) {
-  distribution();
-  globalThis.distribution.node.start(globalThis.distribution.node.config.onStart || (() => {}));
+  globalThis.distribution = distribution();
 }
 
 module.exports = distribution;

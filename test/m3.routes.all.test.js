@@ -188,7 +188,11 @@ beforeAll((done) => {
   group4Group[id.getSID(n4)] = n4;
 
   // Now, start the base listening node
-  distribution.node.start(() => {
+  distribution.node.start((e) => {
+    if (e) {
+      done(e);
+      return;
+    }
     const groupInstantiation = (e, v) => {
       const mygroupConfig = {gid: 'mygroup'};
       const group4Config = {gid: 'group4'};

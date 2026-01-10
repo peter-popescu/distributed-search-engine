@@ -203,7 +203,11 @@ test('(0 pts) comm: send with null message returns error from service', (done) =
 /* Test infrastructure */
 
 beforeAll((done) => {
-  distribution.node.start(() => {
+  distribution.node.start((e) => {
+    if (e) {
+      done(e);
+      return;
+    }
     done();
   });
 });

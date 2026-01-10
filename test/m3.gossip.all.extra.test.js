@@ -24,6 +24,10 @@ const n6 = {ip: '127.0.0.1', port: 8005};
 
 test('(30 pts) all.gossip.send()', (done) => {
   distribution.mygroup.groups.put('newgroup', {}, (e, v) => {
+    if (e && Object.keys(e).length > 0) {
+      done(e);
+      return;
+    }
     const newNode = {ip: '127.0.0.1', port: 4444};
     const message = [
       'newgroup',
@@ -32,8 +36,16 @@ test('(30 pts) all.gossip.send()', (done) => {
 
     const remote = {service: 'groups', method: 'add'};
     distribution.mygroup.gossip.send(message, remote, (e, v) => {
+      if (e && Object.keys(e).length > 0) {
+        done(e);
+        return;
+      }
       setTimeout(() => {
         distribution.mygroup.groups.get('newgroup', (e, v) => {
+          if (e && Object.keys(e).length > 0) {
+            done(e);
+            return;
+          }
           let count = 0;
           for (const k in v) {
             if (Object.keys(v[k]).length > 0) {
@@ -81,14 +93,26 @@ beforeAll((done) => {
   mygroupGroup[id.getSID(n3)] = n3;
 
   // Now, start the base listening node
-  distribution.node.start(() => {
+  distribution.node.start((e) => {
+    if (e) {
+      done(e);
+      return;
+    }
     const groupInstantiation = (e, v) => {
       const mygroupConfig = {gid: 'mygroup'};
 
       // Create some groups
       distribution.local.groups
           .put(mygroupConfig, mygroupGroup, (e, v) => {
+            if (e && Object.keys(e).length > 0) {
+              done(e);
+              return;
+            }
             distribution.mygroup.groups.put(mygroupConfig, mygroupGroup, (e, v) => {
+              if (e && Object.keys(e).length > 0) {
+                done(e);
+                return;
+              }
               done();
             });
           });
@@ -96,11 +120,37 @@ beforeAll((done) => {
 
     // Start the nodes
     distribution.local.status.spawn(n1, (e, v) => {
+      if (e) {
+        done(e);
+        return;
+      }
       distribution.local.status.spawn(n2, (e, v) => {
+        if (e) {
+          done(e);
+          return;
+        }
         distribution.local.status.spawn(n3, (e, v) => {
+          if (e) {
+            done(e);
+            return;
+          }
           distribution.local.status.spawn(n4, (e, v) => {
+            if (e) {
+              done(e);
+              return;
+            }
             distribution.local.status.spawn(n5, (e, v) => {
-              distribution.local.status.spawn(n6, groupInstantiation);
+              if (e) {
+                done(e);
+                return;
+              }
+              distribution.local.status.spawn(n6, (e, v) => {
+                if (e) {
+                  done(e);
+                  return;
+                }
+                groupInstantiation();
+              });
             });
           });
         });
