@@ -23,6 +23,7 @@
  * @param {Callback} callback
  */
 function put(state, configuration, callback) {
+  return callback(new Error('store.put not implemented'));
 }
 
 /**
@@ -30,6 +31,7 @@ function put(state, configuration, callback) {
  * @param {Callback} callback
  */
 function get(configuration, callback) {
+  return callback(new Error('store.get not implemented'));
 }
 
 /**
@@ -37,6 +39,7 @@ function get(configuration, callback) {
  * @param {Callback} callback
  */
 function del(configuration, callback) {
+  return callback(new Error('store.del not implemented'));
 }
 
 module.exports = {put, get, del};

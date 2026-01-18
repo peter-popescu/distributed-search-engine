@@ -18,6 +18,7 @@ const N = 10;
  * @param {Callback} callback
  */
 function recv(payload, callback) {
+  return callback(new Error('gossip.recv not implemented'));
 }
 
 module.exports = {recv};

@@ -3,7 +3,7 @@
  * @typedef {import("../types.js").Node} Node
  * @typedef {import("../types.js").ID} ID
  * @typedef {import("../types.js").NID} NID
- * @typedef {import("../types.js").NID} SID
+ * @typedef {import("../types.js").SID} SID
  * @typedef {import("../types.js").Hasher} Hasher
  */
 
@@ -12,7 +12,7 @@ const crypto = require('crypto');
 
 /**
  * @param {any} obj
- * @return {ID}
+ * @returns {ID}
  */
 function getID(obj) {
   const hash = crypto.createHash('sha256');
@@ -23,7 +23,7 @@ function getID(obj) {
 /**
  * The NID is the SHA256 hash of the JSON representation of the node
  * @param {Node} node
- * @return {NID}
+ * @returns {NID}
  */
 function getNID(node) {
   node = {ip: node.ip, port: node.port};
@@ -33,7 +33,7 @@ function getNID(node) {
 /**
  * The SID is the first 5 characters of the NID
  * @param {Node} node
- * @return {SID}
+ * @returns {SID}
  */
 function getSID(node) {
   return getNID(node).substring(0, 5);

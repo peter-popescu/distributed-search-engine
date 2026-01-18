@@ -269,7 +269,7 @@ test('(0 pts) node starts when called without configuration', (done) => {
 
   setTimeout(() => {
     child.kill();
-  }, 2000);
+  }, 1000);
 
   child.on('exit', (code, signal) => {
     expect(signal).toBe('SIGTERM');
@@ -286,7 +286,7 @@ test('(0 pts) node starts when called with serialized configuration', (done) => 
 
   setTimeout(() => {
     child.kill();
-  }, 2000);
+  }, 1000);
 
   child.on('exit', (code, signal) => {
     expect(signal).toBe('SIGTERM');
@@ -303,7 +303,7 @@ test('(0 pts) node starts when called with JSON configuration', (done) => {
 
   setTimeout(() => {
     child.kill();
-  }, 2000);
+  }, 1000);
 
   child.on('exit', (code, signal) => {
     expect(signal).toBe('SIGTERM');
@@ -361,7 +361,7 @@ test('(0 pts) node responds with serialized error on non-PUT', (done) => {
   request.end();
 });
 
-test('(0 pts) node responds with error and value for success', (done) => {
+test('(0 pts) node responds with [err, value] for success', (done) => {
   const node = distribution.node.config;
   const options = {
     hostname: node.ip,
@@ -381,14 +381,10 @@ test('(0 pts) node responds with error and value for success', (done) => {
     response.on('end', () => {
       try {
         const decoded = distribution.util.deserialize(data);
-        if (Array.isArray(decoded)) {
-          expect(decoded.length).toBe(2);
-          expect(decoded[0]).toBeFalsy();
-          expect(decoded[1]).toEqual(id.getNID(node));
-        } else {
-          expect(decoded?.error).toBeFalsy();
-          expect(decoded?.value).toEqual(id.getNID(node));
-        }
+        expect(Array.isArray(decoded)).toBe(true);
+        expect(decoded.length).toBe(2);
+        expect(decoded[0]).toBeFalsy();
+        expect(decoded[1]).toEqual(id.getNID(node));
         done();
       } catch (err) {
         done(err);
@@ -404,7 +400,7 @@ test('(0 pts) node responds with error and value for success', (done) => {
   request.end();
 });
 
-test('(0 pts) node responds with error and empty value for missing method', (done) => {
+test('(0 pts) node responds with [err, null] for missing method', (done) => {
   const node = distribution.node.config;
   const options = {
     hostname: node.ip,
@@ -424,14 +420,10 @@ test('(0 pts) node responds with error and empty value for missing method', (don
     response.on('end', () => {
       try {
         const decoded = distribution.util.deserialize(data);
-        if (Array.isArray(decoded)) {
-          expect(decoded.length).toBe(2);
-          expect(decoded[0]).toBeInstanceOf(Error);
-          expect(decoded[1]).toBeFalsy();
-        } else {
-          expect(decoded?.error).toBeInstanceOf(Error);
-          expect(decoded?.value).toBeFalsy();
-        }
+        expect(Array.isArray(decoded)).toBe(true);
+        expect(decoded.length).toBe(2);
+        expect(decoded[0]).toBeInstanceOf(Error);
+        expect(decoded[1]).toBeNull();
         done();
       } catch (err) {
         done(err);

@@ -5,7 +5,7 @@
  * @typedef {import("../util/id.js").Node} Node
  *
  * @typedef {Object} Groups
- * @property {(config: Config | string, group: Object<string, Node>, callback: Callback) => void} put
+ * @property {(config: Config | string, group: Object.<string, Node>, callback: Callback) => void} put
  * @property {(name: string, callback: Callback) => void} del
  * @property {(name: string, callback: Callback) => void} get
  * @property {(name: string, node: Node, callback: Callback) => void} add
@@ -21,10 +21,11 @@ function groups(config) {
 
   /**
    * @param {Config | string} config
-   * @param {Object<string, Node>} group
+   * @param {Object.<string, Node>} group
    * @param {Callback} callback
    */
   function put(config, group, callback) {
+    return callback(new Error('groups.put not implemented'));
   }
 
   /**
@@ -32,6 +33,7 @@ function groups(config) {
    * @param {Callback} callback
    */
   function del(name, callback) {
+    return callback(new Error('groups.del not implemented'));
   }
 
   /**
@@ -39,6 +41,7 @@ function groups(config) {
    * @param {Callback} callback
    */
   function get(name, callback) {
+    return callback(new Error('groups.get not implemented'));
   }
 
   /**
@@ -47,6 +50,7 @@ function groups(config) {
    * @param {Callback} callback
    */
   function add(name, node, callback) {
+    return callback(new Error('groups.add not implemented'));
   }
 
   /**
@@ -55,6 +59,7 @@ function groups(config) {
    * @param {Callback} callback
    */
   function rem(name, node, callback) {
+    return callback(new Error('groups.rem not implemented'));
   }
 
   return {

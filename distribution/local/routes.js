@@ -7,7 +7,7 @@
 /**
  * @param {ServiceName | {service: ServiceName, gid?: string}} configuration
  * @param {Callback} callback
- * @return {void}
+ * @returns {void}
  */
 function get(configuration, callback) {
 }
@@ -16,7 +16,7 @@ function get(configuration, callback) {
  * @param {object} service
  * @param {string} configuration
  * @param {Callback} callback
- * @return {void}
+ * @returns {void}
  */
 function put(service, configuration, callback) {
 }

@@ -20,6 +20,7 @@ function mem(config) {
    * @param {Callback} callback
    */
   function get(configuration, callback) {
+    return callback(new Error('mem.get not implemented'));
   }
 
   /**
@@ -28,6 +29,7 @@ function mem(config) {
    * @param {Callback} callback
    */
   function put(state, configuration, callback) {
+    return callback(new Error('mem.put not implemented'));
   }
 
   /**
@@ -35,6 +37,7 @@ function mem(config) {
    * @param {Callback} callback
    */
   function del(configuration, callback) {
+    return callback(new Error('mem.del not implemented'));
   }
 
   /**
@@ -42,6 +45,7 @@ function mem(config) {
    * @param {Callback} callback
    */
   function reconf(configuration, callback) {
+    return callback(new Error('mem.reconf not implemented'));
   }
   /* For the distributed mem service, the configuration will
           always be a string */

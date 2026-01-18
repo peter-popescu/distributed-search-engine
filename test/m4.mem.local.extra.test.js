@@ -2,7 +2,6 @@ require('../distribution.js')();
 require('./helpers/sync-guard');
 const distribution = globalThis.distribution;
 
-
 test('(1 pts) local.mem.get(no key)', (done) => {
   const users = [
     {first: 'Emma', last: 'Watson'},

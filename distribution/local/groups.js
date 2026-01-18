@@ -7,44 +7,17 @@
 
 /**
  * @param {string} name
- * @param {(e: ?Error, v: ?Object.<string, Node>) => void} callback
+ * @param {(e: Error | null, v: Object.<string, Node> | null) => void} callback
  */
 function get(name, callback) {
 }
 
 /**
  * @param {Config | string} config
- * @param {Object<string, Node>} group
- * @param {(e: ?Error, v: ?Object.<string, Node>) => void} callback
+ * @param {Object.<string, Node>} group
+ * @param {(e: Error | null, v: Object.<string, Node> | null) => void} callback
  */
 function put(config, group, callback) {
-  log(
-      `groups.put: config: ${JSON.stringify(config)} group: ${
-        JSON.stringify(group)
-      }`,
-  );
-
-  group = group || {};
-
-  if (typeof config === 'string') {
-    config = {gid: config};
-  }
-
-  if (!config.gid) {
-    return callback(Error('Config gid was null'), null);
-  }
-
-  groupsStore[config.gid] = group;
-
-  Object.values(group).forEach((node) => {
-    groupsStore['all'][globalThis.distribution.util.id.getSID(node)] = node;
-  });
-
-  const {setup} = require('../../distribution/all/all.js');
-  globalThis.distribution[config.gid] = setup(config);
-
-  return callback(null, group);
-  // __end_solution__
 }
 
 /**

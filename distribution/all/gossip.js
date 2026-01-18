@@ -26,7 +26,7 @@
 
 /**
  * @param {Config} config
- * @return {Gossip}
+ * @returns {Gossip}
  */
 function gossip(config) {
   const context = {};
@@ -41,21 +41,24 @@ function gossip(config) {
    * @param {Callback} callback
    */
   function send(payload, remote, callback) {
+    return callback(new Error('gossip.send not implemented'));
   }
 
   /**
    * @param {number} period
    * @param {() => void} func
-   * @param {(arg0: null, arg1: NodeJS.Timeout) => void} callback
+   * @param {Callback} callback
    */
   function at(period, func, callback) {
+    return callback(new Error('gossip.at not implemented'));
   }
 
   /**
    * @param {NodeJS.Timeout} intervalID
-   * @param {(arg0: null, arg1: any) => void} callback
+   * @param {Callback} callback
    */
   function del(intervalID, callback) {
+    return callback(new Error('gossip.del not implemented'));
   }
 
   return {send, at, del};

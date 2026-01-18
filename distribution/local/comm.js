@@ -4,7 +4,7 @@
  * @typedef {import("../types.js").Node} Node
  */
 
-
+const http = require('node:http');
 
 /**
  * @typedef {Object} Target
@@ -18,7 +18,7 @@
  * @param {Array<any>} message
  * @param {Target} remote
  * @param {(error: Error, value?: any) => void} callback
- * @return {void}
+ * @returns {void}
  */
 function send(message, remote, callback) {
 }

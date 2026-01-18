@@ -14,6 +14,7 @@ Usage: npm test -- [options | pattern]
 Pattern:
   The pattern is a substring matched against test file names.
   Run "npm test -- mN" to run all tests from milestone N.
+  Run "npm test -- sN" to run the scenario for milestone N (N/A for milestone 0).
 
 Options:
   -a, --all               Run all tests (scenarios, extra credit, and normal tests)
@@ -147,9 +148,17 @@ fi
 # shellcheck disable=SC2294
 if [ -n "$PATTERN" ]; then
     MATCH_FLAGS=""
-    MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*test*.js\""
-    MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*.extra.test.js\""
-    MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*.scenario.js\""
+    if [[ "$PATTERN" == s* ]]; then
+        # npm test -- sN: only run scenarios for milestone N
+        MILESTONE="${PATTERN/#s/m}" # sN -> mN
+        MATCH_FLAGS+=" --testMatch \"**/*${MILESTONE}*.scenario.js\""
+    else
+        # npm test -- mN: run all tests for milestone N
+        MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*test*.js\""
+        MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*.extra.test.js\""
+        MATCH_FLAGS+=" --testMatch \"**/*${PATTERN}*.scenario.js\""
+    fi
+
     eval "$JEST_COMMAND $MATCH_FLAGS $JEST_COMMAND_FLAGS"
     exit $?
 else

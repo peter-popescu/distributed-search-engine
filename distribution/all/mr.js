@@ -40,7 +40,7 @@
 
 /**
  * @param {Config} config
- * @return {Mr}
+ * @returns {Mr}
  */
 function mr(config) {
   const context = {
@@ -50,9 +50,10 @@ function mr(config) {
   /**
    * @param {MRConfig} configuration
    * @param {Callback} cb
-   * @return {void}
+   * @returns {void}
    */
   function exec(configuration, cb) {
+    return cb(new Error('mr.exec not implemented'));
   }
 
   return {exec};

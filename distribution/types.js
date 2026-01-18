@@ -9,9 +9,9 @@
  *
  * @typedef {Object.<string, Node>} Group
  *
- * @typedef {!string} ID
- * @typedef {!string} NID
- * @typedef {!string} SID
+ * @typedef {string} ID
+ * @typedef {string} NID
+ * @typedef {string} SID
  *
  * @typedef {(kid: ID, nids: NID[]) => NID} Hasher
  *

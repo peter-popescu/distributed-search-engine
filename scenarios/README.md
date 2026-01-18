@@ -14,7 +14,7 @@ Each scenario is a single test case.
 The test case will usually include some preparation steps, ask you to either fill out
 some code to make the `expect` calls pass, or write the `expect` calls themselves.
 
-An example of a scenario to M1 is shown below:
+An example scenario for M1 is shown below:
 ```javascript
 test('(5 pts) (scenario) 40 bytes object', () => {
 /* 

@@ -22,6 +22,7 @@ function routes(config) {
    * @param {Callback} callback
    */
   function put(service, name, callback) {
+    return callback(new Error('routes.put not implemented'));
   }
 
   /**
@@ -29,6 +30,7 @@ function routes(config) {
    * @param {Callback} callback
    */
   function rem(configuration, callback) {
+    return callback(new Error('routes.rem not implemented'));
   }
 
   return {put, rem};
