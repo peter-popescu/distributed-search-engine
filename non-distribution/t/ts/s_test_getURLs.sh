@@ -15,8 +15,19 @@ url="https://cs.brown.edu/courses/csci1380/sandbox/1/level_1a/index.html"
 if ! $DIFF <(cat "$T_FOLDER"/d/sd0.txt | c/getURLs.js $url | sort) <(cat /dev/null) >&2;
 then
     echo "$0 failure: URL sets are not identical"
-    exit 1
+    EXIT=1
+else
+    echo "$0 success: URL sets are identical"
 fi
 
-echo "$0 success: URL sets are identical"
-exit 0
+# empty gives empty
+
+if ! $DIFF <(cat /dev/null | c/getURLs.js $url | sort) <(cat /dev/null) >&2;
+then
+    echo "$0 failure: URL sets are not identical"
+    EXIT=1
+else
+    echo "$0 success: URL sets are identical"
+fi
+
+exit $EXIT
