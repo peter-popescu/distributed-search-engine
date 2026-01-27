@@ -10,6 +10,8 @@ DIFF=${DIFF:-diff}
 
 cat "$T_FOLDER"/d/d7.txt > d/global-index.txt
 
+EXIT=0
+
 # querying stop word gives nothing
 
 term="a"
@@ -17,21 +19,19 @@ term="a"
 if $DIFF <(./query.js "$term") <(cat /dev/null) >&2;
 then
     echo "$0 success: querying stop word empty"
-    exit 0
 else
     echo "$0 failure: query stop word not empty"
-    exit 1
+    EXIT=1
 fi
 
-# redirect d4 into it (gives all terms)
+# redirect d4 into it (returns empty, checks grep for graceful failure)
 
-if $DIFF <(./query.js <"$T_FOLDER"/d/d4.txt) <(cat "$T_FOLDER"/d/d7.txt) >&2;
+if $DIFF <(./query.js $(cat "$T_FOLDER"/d/d4.txt)) <(cat /dev/null) >&2;
 then
     echo "$0 success: search results are identical"
-    exit 0
 else
     echo "$0 failure: search results are not identical"
-    exit 1
+    EXIT=1
 fi
 
 # more specific query gives single line (matches trigram)
@@ -41,9 +41,9 @@ term="check stuff level"
 if $DIFF <(./query.js "$term") <(grep -F "$term" "$T_FOLDER"/d/d7.txt) >&2;
 then
     echo "$0 success: search results match trigram"
-    exit 0
 else
     echo "$0 failure: search results don't match trigram"
-    exit 1
+    EXIT=1
 fi
 
+exit $EXIT

@@ -32,7 +32,14 @@ const {execSync} = require('child_process');
 
 function query(indexFile, args) {
   const pattern = execSync(`echo "${args}" | ./c/process.sh | ./c/stem.js | tr "\r\n" " "`, {encoding: 'utf-8'}).trim();
-  console.log(execSync(`grep "${pattern}" "${indexFile}"`, {encoding: 'utf-8'}).trim());
+  if (pattern === '') {
+    return;
+  }
+  const queryResult = execSync(`grep "${pattern}" "${indexFile}" || true`, {encoding: 'utf-8'}).trim();
+  if (queryResult === '') {
+    return;
+  }
+  console.log(queryResult);
 }
 
 const args = process.argv.slice(2); // Get command-line arguments
