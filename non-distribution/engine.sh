@@ -6,6 +6,7 @@ while read -r url; do
 
   if [[ "$url" == "stop" ]]; then
     # stop the engine if it sees the string "stop" 
+    echo "[engine] stopping"
     exit;
   fi
 
@@ -16,6 +17,7 @@ while read -r url; do
 
   if  [[ "$(cat d/visited.txt | wc -l)" -ge "$(cat d/urls.txt | wc -l)" ]]; then
       # stop the engine if it has seen all available URLs
+      echo "[engine] seen all URLs"
       break;
   fi
 

@@ -25,12 +25,14 @@ For example, `execSync(`echo "${input}" | ./c/process.sh`, {encoding: 'utf-8'});
 */
 
 
-const fs = require('fs');
+// const fs = require('fs');
 const {execSync} = require('child_process');
-const path = require('path');
+// const path = require('path');
 
 
 function query(indexFile, args) {
+  const pattern = execSync(`echo "${args}" | ./c/process.sh | ./c/stem.js | tr "\r\n" " "`, {encoding: 'utf-8'}).trim();
+  console.log(execSync(`grep "${pattern}" "${indexFile}"`, {encoding: 'utf-8'}).trim());
 }
 
 const args = process.argv.slice(2); // Get command-line arguments
