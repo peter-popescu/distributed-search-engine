@@ -26,7 +26,7 @@ fi
 
 # redirect d4 into it (returns empty, checks grep for graceful failure)
 
-if $DIFF <(./query.js $(cat "$T_FOLDER"/d/d4.txt)) <(cat /dev/null) >&2;
+if $DIFF <(./query.js "$(cat "$T_FOLDER"/d/d4.txt)") <(cat /dev/null) >&2;
 then
     echo "$0 success: search results are identical"
 else
