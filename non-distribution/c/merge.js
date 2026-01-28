@@ -32,7 +32,6 @@ Remember to error gracefully, particularly when reading the global index file.
 */
 
 const fs = require('fs');
-// const {findSourceMap} = require('module');
 const readline = require('readline');
 
 const rl = readline.createInterface({
