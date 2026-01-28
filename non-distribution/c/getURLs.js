@@ -7,7 +7,7 @@ Usage: page.html > ./getURLs.js <base_url>
 
 const readline = require('readline');
 const {JSDOM} = require('jsdom');
-// const {URL} = require('url');
+const {convert} = require('html-to-text');
 
 // 1. Read the base URL from the command-line argument using `process.argv`.
 let baseURL = process.argv[2] || '';
@@ -41,6 +41,12 @@ rl.on('close', () => {
   // 5. Print each absolute URL to the console, one per line.
   if (urls.length) {
     console.log(urls.join('\n'));
+  }
+
+  // experiment: do getText here instead
+  const text = convert(lines);
+  if (text !== '') {
+    console.error(text);
   }
 });
 
