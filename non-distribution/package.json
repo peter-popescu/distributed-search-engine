@@ -39,7 +39,7 @@
       },
       "throughput": {
         "dev": [{"indexer": 2.11, "crawler": 1.23, "querier": 3.40}],
-        "aws": [{"indexer": 0, "crawler": 0, "querier": 0}],
+        "aws": [{"indexer": 1.07, "crawler": 0.96, "querier": 1.96}],
         "gs": []
       },
       "dloc": 3000
