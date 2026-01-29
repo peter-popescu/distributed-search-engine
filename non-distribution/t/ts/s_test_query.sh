@@ -46,4 +46,16 @@ else
     EXIT=1
 fi
 
+# querying word only in url gives nothing
+
+term="brown"
+
+if $DIFF <(./query.js "$term") <(cat /dev/null) >&2;
+then
+    echo "$0 success: querying url word empty"
+else
+    echo "$0 failure: query url not empty"
+    EXIT=1
+fi
+
 exit $EXIT

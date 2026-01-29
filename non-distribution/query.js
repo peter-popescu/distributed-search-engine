@@ -27,19 +27,33 @@ For example, `execSync(`echo "${input}" | ./c/process.sh`, {encoding: 'utf-8'});
 
 // const fs = require('fs');
 const {execSync} = require('child_process');
-// const path = require('path');
 
 
 function query(indexFile, args) {
-  const pattern = execSync(`echo "${args}" | ./c/process.sh | ./c/stem.js | tr "\r\n" " "`, {encoding: 'utf-8'}).trim();
+  let pattern = execSync(`echo "${args}" | ./c/process.sh | ./c/stem.js | tr "\r\n" " "`, {encoding: 'utf-8'}).trim();
   if (pattern === '') {
     return;
   }
+  pattern = pattern + '.*|';
   const queryResult = execSync(`grep "${pattern}" "${indexFile}" || true`, {encoding: 'utf-8'}).trim();
   if (queryResult === '') {
     return;
   }
   console.log(queryResult);
+
+  // experiment: keep filtering in JS?
+  // const regExp = new RegExp(pattern);
+  // fs.readFile(indexFile, 'utf-8', (err, data) => {
+  //   if (err) {
+  //     console.error('Error reading file:', err);
+  //     return;
+  //   }
+  //   const queryResult = data.split('\n').filter((line) => regExp.test(line));
+  //   if (queryResult === '') {
+  //     return;
+  //   }
+  //   console.log(queryResult.join('\n'));
+  // });
 }
 
 const args = process.argv.slice(2); // Get command-line arguments
